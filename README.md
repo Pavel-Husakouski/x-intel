@@ -1,8 +1,10 @@
-# intel
+# x-intel
 
-[![Build Status](https://travis-ci.org/seanmonstar/intel.svg?branch=master)](https://travis-ci.org/seanmonstar/intel)
-![Coverage Status](./coverage.png)
-[![NPM version](https://badge.fury.io/js/intel.svg)](http://badge.fury.io/js/intel)
+## Fork 
+
+This project is a fork of the abandoned [intel](https://github.com/seanmonstar/intel) package
+
+## Intel
 
 An abbreviation of intelligence. In this case, the acquirement of information.
 

@@ -1,5 +1,9 @@
 # intel ChangeLog
 
+### v2.0.0 - 2025-12-03 
+
+- node 22+ compatibility issues
+
 ### v1.2.0 - 2017-06-01
 
 - changed handleExceptions exitOnError to exit immediately, instead of

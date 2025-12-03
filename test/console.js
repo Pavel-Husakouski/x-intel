@@ -180,7 +180,7 @@ module.exports = {
       assert(spy._lastRecord);
       assert.equal(spy._lastRecord.name, 'test.util');
     },
-    'intercepts debug() messages': function() {
+      'intercepts debug() messages': function() {
       intel.console({ debug: 'recon,escapes', ignore: 'test.console.escapes' });
       clearDebug();
 

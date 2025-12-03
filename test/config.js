@@ -12,18 +12,23 @@ const intel = require('../');
 
 const NOW = Date.now();
 var counter = 1;
+
 function tmp() {
-  return path.join(os.tmpDir(),
-      'intel-' + NOW + '-' + process.pid + '-' + (counter++));
+  return path.join(os.tmpdir(),
+    'intel-' + NOW + '-' + process.pid + '-' + (counter++));
 }
 
 function spy() {
   var args = [];
-  var fn = function() {
+  var fn = function () {
     args.push(arguments);
   };
-  fn.getCallCount = function() { return args.length; };
-  fn.getLastArgs = function() { return args[args.length - 1]; };
+  fn.getCallCount = function () {
+    return args.length;
+  };
+  fn.getLastArgs = function () {
+    return args[args.length - 1];
+  };
   return fn;
 }
 
@@ -31,6 +36,7 @@ function SpyHandler() {
   intel.Handler.apply(this, arguments);
   this.spy = spy();
 }
+
 util.inherits(SpyHandler, intel.Handler);
 SpyHandler.prototype.emit = function spyEmit(record) {
   this.spy(record);
@@ -40,19 +46,19 @@ var oldBasic;
 var oldLevel;
 module.exports = {
   'basicConfig': {
-    'before': function() {
+    'before': function () {
       oldBasic = intel.basicConfig;
       oldLevel = intel._level;
     },
-    'root logger calls basicConfig': function() {
+    'root logger calls basicConfig': function () {
       var val;
       var stream = {
-        write: function(out) {
+        write: function (out) {
           val = out;
         }
       };
 
-      intel.basicConfig = function() {
+      intel.basicConfig = function () {
         oldBasic({ stream: stream });
       };
 
@@ -60,7 +66,7 @@ module.exports = {
       assert.equal(val, 'root.INFO: danger\n');
       assert.equal(intel._level, oldLevel);
     },
-    'only works once': function() {
+    'only works once': function () {
       intel.basicConfig();
       assert.equal(intel._level, oldLevel);
 
@@ -68,28 +74,28 @@ module.exports = {
       assert.equal(intel._handlers.length, 1);
       assert.equal(intel._level, oldLevel);
     },
-    'works with file option': function() {
+    'works with file option': function () {
       var name = tmp();
       intel.basicConfig({ file: name });
       assert.equal(intel._handlers.length, 1);
       assert.equal(intel._handlers[0]._file, name);
     },
-    'works with level': function() {
+    'works with level': function () {
       intel.basicConfig({ level: 'error' });
       assert.equal(intel._level, intel.ERROR);
     },
-    'works with format': function() {
-      intel.basicConfig({ format: '%(foo)s'});
+    'works with format': function () {
+      intel.basicConfig({ format: '%(foo)s' });
       assert.equal(intel._handlers[0]._formatter._format, '%(foo)s');
     },
-    'afterEach': function() {
+    'afterEach': function () {
       intel.basicConfig = oldBasic;
       intel.setLevel(oldLevel);
       intel._handlers = [];
     }
   },
   'config': {
-    'should be able to configure logging': function() {
+    'should be able to configure logging': function () {
       intel.config({
         formatters: {
           'basic': {
@@ -99,7 +105,8 @@ module.exports = {
             'format': 'foo! %(levelname)s: %(message)s'
           },
           'fn': {
-            'formatFn': function() {}
+            'formatFn': function () {
+            }
           }
         },
         filters: {
@@ -142,7 +149,7 @@ module.exports = {
       assert.equal(log._handlers.length, 1);
       assert(!log.propagate);
 
-      var msg = handler.format({ message: 'hi', levelname: 'BAR'});
+      var msg = handler.format({ message: 'hi', levelname: 'BAR' });
       assert.equal(msg, 'foo! BAR: hi');
 
       log.debug('user');
@@ -155,7 +162,7 @@ module.exports = {
       log.info('ignore me');
       assert.equal(handler.spy.getCallCount(), 1);
     },
-    'should be able to config with just JSON': function() {
+    'should be able to config with just JSON': function () {
       intel.config(require('./util/config.json'));
 
       var log = intel.getLogger('test.config.json');
@@ -177,8 +184,8 @@ module.exports = {
       var custom = log._handlers[0]._formatter;
       assert.equal(custom.format({ message: 'foo' }), 'FOO');
     },
-    'should error if formatFn is not a function': function() {
-      assert.throws(function() {
+    'should error if formatFn is not a function': function () {
+      assert.throws(function () {
         intel.config({
           formatters: {
             'foo': {
@@ -188,8 +195,8 @@ module.exports = {
         });
       }, /function parameter did not parse as a function$/);
     },
-    'should error if cannot find handler': function() {
-      assert.throws(function() {
+    'should error if cannot find handler': function () {
+      assert.throws(function () {
         intel.config({
           loggers: {
             'missingHandler': {
@@ -199,7 +206,7 @@ module.exports = {
         });
       }, /Handler "nope" is not defined in config$/);
     },
-    'should assign a NullHandler to ROOT if handlers object': function() {
+    'should assign a NullHandler to ROOT if handlers object': function () {
       intel._handlers = [];
       intel.config({
         handlers: {},
