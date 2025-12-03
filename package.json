@@ -13,9 +13,9 @@
   "devDependencies": {
     "debug": "~2.2.0",
     "insist": "^1.0",
-    "mocha": "3.x",
+    "mocha": "^11.7.5",
     "walk": "2.x",
-    "winston": "^2.0"
+    "winston": "^3.18.3"
   },
   "readmeFilename": "README.md",
   "description": "A fork of the abandoned project `intel`",
